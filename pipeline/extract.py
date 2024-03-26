@@ -1,5 +1,6 @@
 from datetime import datetime
 from dotenv import load_dotenv
+import logging
 import os
 
 from boto3 import client
@@ -12,3 +13,6 @@ ACCESS_KEY_ID = os.getenv("ACCESS_ID")
 SECRET_ACCESS_KEY = os.getenv("ACCESS_KEY")
 
 s3 = client('s3', aws_access_key_id = ACCESS_KEY_ID, aws_secret_access_key = SECRET_ACCESS_KEY)
+
+def download_relevant_files_from_s3():
+    return ''
