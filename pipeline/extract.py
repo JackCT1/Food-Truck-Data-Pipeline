@@ -28,6 +28,8 @@ def download_relevant_files_from_s3(client: client, bucket: str, folder: str, to
     
     files_downloaded = 0
     for file in file_names:
+        if f"/{current_year}-{current_month}/{current_day}/{current_hour}" in file:
+            s3.download_file(bucket, file, f"{folder}/{file}")
         files_downloaded += 1
     if files_downloaded > 0:
         return True
