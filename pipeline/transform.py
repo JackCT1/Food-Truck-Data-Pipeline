@@ -18,5 +18,17 @@ def combine_files_into_dataframe(filename: str, folder: str) -> bool:
 
     return False
 
-def clean_dataframe() -> pd.DataFrame:
-    return ''
+def clean_dataframe(filepath: str) -> pd.DataFrame:
+    transactions = pd.read_csv(filepath)
+    transactions = transactions[transactions["total"] != "ERR"]
+    transactions = transactions[transactions["total"] != "blank"]
+    transactions = transactions[transactions["total"] != "VOID"]
+    transactions = transactions.dropna(subset=["total"])
+    transactions["total"] = transactions["total"].astype(float)
+    transactions = transactions[transactions["total"] > 0]
+    transactions["timestamp"] = pd.to_datetime(transactions["timestamp"])
+    transactions["type"] = transactions["type"].replace({
+    "cash": 1,
+    "card": 2
+    })
+    return transactions
