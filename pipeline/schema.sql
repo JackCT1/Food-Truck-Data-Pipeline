@@ -31,3 +31,17 @@ CREATE TABLE transaction(
     FOREIGN KEY (type_id) REFERENCES type(id),
     FOREIGN KEY (truck_id) REFERENCES truck(id)
 );
+
+INSERT INTO type (name)
+VALUES
+('cash'),
+('card');
+
+INSERT INTO truck (name, description, card_reader, fsa_rating)
+VALUES
+('Burrito Madness','An authentic taste of Mexico.', TRUE, 4),
+('Kings of Kebabs', 'Locally-sourced meat cooked over a charcoal grill.', TRUE, 2),
+('Cupcakes by Michelle','Handcrafted cupcakes made with high-quality, organic ingredients.', TRUE, 5),
+('Hartmann''s Jellied Eels','A taste of history with this classic English dish.', TRUE, 4),
+('Yoghurt Heaven','All the great tastes, but only some of the calories!', TRUE, 4),
+('SuperSmoothie','Pick any fruit or vegetable, and we''ll make you a delicious, healthy, multi-vitamin shake. Live well; live wild.', FALSE, 3);
