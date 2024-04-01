@@ -2,6 +2,9 @@ from os import listdir, path, remove
 import pandas as pd
 
 def combine_files_into_dataframe(filename: str, folder: str) -> bool:
+    """
+    Combine downloaded csv files into one single pandas dataframe
+    """
     csv_files = [file for file in listdir(folder) if file.endswith(".csv")]
     upload_csv_file = f"{folder}/{filename}.csv"
 
@@ -19,6 +22,9 @@ def combine_files_into_dataframe(filename: str, folder: str) -> bool:
     return False
 
 def clean_dataframe(filepath: str) -> pd.DataFrame:
+    """
+    Transform the combined dataframe
+    """
     transactions = pd.read_csv(filepath)
     transactions = transactions[transactions["total"] != "ERR"]
     transactions = transactions[transactions["total"] != "blank"]
