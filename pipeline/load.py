@@ -18,3 +18,14 @@ def connect_to_database() -> Connection:
      user=os.getenv["DB_USERNAME"],
      password=os.getenv["DB_PASSWORD"]
      )
+
+def convert_csv_to_list(filepath: str) -> list:
+    """
+    Produces a list of strings from a csv file
+    """
+
+    with open(filepath, newline='', encoding="utf-8") as f:
+        reader = csv.reader(f)
+        data = list(reader)
+
+    return data[1:]
