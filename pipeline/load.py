@@ -21,7 +21,7 @@ def connect_to_database() -> Connection:
 
 def convert_csv_to_list(filepath: str) -> list:
     """
-    Produces a list of strings from a csv file
+    Opens csv file and produces list of rows for database upload
     """
 
     with open(filepath, newline='', encoding="utf-8") as f:
