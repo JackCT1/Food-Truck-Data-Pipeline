@@ -8,7 +8,7 @@ load_dotenv()
 
 def connect_to_database() -> Connection:
     """
-    Connects tp relevant database
+    Connects to relevant database
     """
 
     return redshift_connector.connect(
@@ -29,3 +29,15 @@ def convert_csv_to_list(filepath: str) -> list:
         data = list(reader)
 
     return data[1:]
+
+def upload_transaction_data(conn: Connection, schema: str, transactions: list) -> None:
+    """
+    Uploads transaction data to the database
+    """
+
+    sql = "INSERT INTO transaction (timestamp, type_id, total, truck_id) VALUES (%s,%s,%s,%s)"
+
+    with conn.cursor() as cur:
+        cur.execute(f"SET SEARCH_PATH = {schema};")
+        cur.executemany(sql, transactions)
+        conn.commit()
