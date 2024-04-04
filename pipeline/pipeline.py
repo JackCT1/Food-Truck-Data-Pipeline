@@ -14,3 +14,10 @@ SECRET_ACCESS_KEY = os.getenv("ACCESS_KEY")
 
 if __name__ == "__main__":
     s3_client = connect_to_s3(ACCESS_KEY_ID, SECRET_ACCESS_KEY)
+
+    downloaded_s3_files = download_relevant_files_from_s3(s3_client, BUCKET_NAME, 'data', datetime.today())
+
+    if downloaded_s3_files:
+        ''
+    else:
+        ''
