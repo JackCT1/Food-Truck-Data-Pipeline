@@ -6,19 +6,14 @@ import os
 from boto3 import client
 import botocore.exceptions
 
-load_dotenv()
-
-BUCKET_NAME = os.getenv("BUCKET_NAME")
-ACCESS_KEY_ID = os.getenv("ACCESS_ID")
-SECRET_ACCESS_KEY = os.getenv("ACCESS_KEY")
-
-s3 = client('s3', aws_access_key_id = ACCESS_KEY_ID, aws_secret_access_key = SECRET_ACCESS_KEY)
+def connect_to_s3(access_key: str, secret_access_key: str)-> client:
+    return client('s3', aws_access_key_id = access_key, aws_secret_access_key = secret_access_key)
 
 def download_relevant_files_from_s3(client: client, bucket: str, folder: str, today: datetime) -> bool:
     """
     Accesses relevant s3 bucket, downloads contents and puts into specified directory
     """
-    contents = s3.list_objects(Bucket=bucket)["Contents"]
+    contents = client.list_objects(Bucket=bucket)["Contents"]
     file_names = [list_object["Key"] for list_object in contents]
 
     current_year = today.year
