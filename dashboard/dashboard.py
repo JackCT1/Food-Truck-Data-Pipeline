@@ -26,6 +26,65 @@ def get_dataframe(conn: redshift_connector.Connection, schema_name: str, table_n
     
     return dataframe
 
+alt.data_transformers.disable_max_rows()
+
+def get_avg_transaction_chart(dataframe: pd.DataFrame, selected: [list]) -> alt.Chart:
+    """Creates a bar chart that displays the average transaction value in selected trucks."""
+
+    dataframe = dataframe[dataframe["truck_id"].isin(selected)]
+    dataframe["total"] = dataframe["total"].astype("float")
+
+    alt.data_transformers.disable_max_rows()
+
+    return alt.Chart(dataframe).mark_bar(
+                    ).encode(x='truck_id:N', y='mean(total):Q', color=alt.Color(
+                        'truck_id:N',
+                        scale={"scheme": "magma"}).legend(title="Truck ID"))
+
+
+def get_daily_income_chart(dataframe: pd.DataFrame, selected: [list]) -> alt.Chart:
+    """Creates a line chart showing the average daily income for selected trucks."""
+
+    dataframe = dataframe[dataframe["truck_id"].isin(selected)]
+    dataframe["total"] = dataframe["total"].astype("float")
+
+    return alt.Chart(dataframe).mark_line().encode(
+            x="day(timestamp):T",
+            y="sum(total):Q",
+            color=alt.Color(
+                "truck_id:N",
+                scale={"scheme": "magma"}).legend(
+                    title="Truck ID"))
+
+
+def get_type_pie_chart(dataframe: pd.DataFrame, selected: [list]) -> alt.Chart:
+    """Creates a pie chart showing the proportion of cash & card transactions in selected trucks."""
+
+    dataframe = dataframe[dataframe["truck_id"].isin(selected)]
+
+    types = dataframe.groupby(["name"]).count().reset_index()
+    types = types.rename(columns={"total": "count"})
+    types = types[["name","count"]]
+
+    return alt.Chart(types).mark_arc(
+                     ).encode(theta='count',
+                              color=alt.Color('name:N',
+                                              scale={"scheme": "magma"}).legend(title="Type"))
+
+
+def get_transaction_count_chart(dataframe: pd.DataFrame, selected: [list]) -> alt.Chart:
+    """Creates a bar chart showing the total amount of transactions for selected trucks."""
+
+    dataframe = dataframe[dataframe["truck_id"].isin(selected)]
+
+    count = dataframe.groupby(["truck_id"]).count().reset_index()
+    count = count.rename(columns={"total": "count"})
+    count = count[["truck_id", "count"]]
+
+    return alt.Chart(count).mark_bar(
+    ).encode(x="truck_id:N", y="count:Q", color=alt.Color("truck_id:N",
+                                                      scale={"scheme": "magma"}).legend(title="Truck ID"))
+
 if __name__ == "__main__":
     conn = get_db_connection()
 
