@@ -18,13 +18,13 @@ def connect_to_database() -> Connection:
      password=os.getenv["DB_PASSWORD"]
      )
 
-def get_dataframe(conn: redshift_connector.Connection, schema_name: str, db_name: str):
+def get_dataframe(conn: redshift_connector.Connection, schema_name: str, table_name: str):
     with conn.cursor() as cur:
         cur.execute("SET SEARCH_PATH = {schema_name};")
-        cur.execute(f"SELECT * FROM {db_name};")
-        transaction_df = cur.get_dataframe()
+        cur.execute(f"SELECT * FROM {table_name};")
+        dataframe = cur.get_dataframe()
     
-    return transaction_df
+    return dataframe
 
 if __name__ == "__main__":
     ''
